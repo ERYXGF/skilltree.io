@@ -219,3 +219,6 @@ __marimo__/
 
 #Info
 info/
+
+#.env.example because of the leak of the API key: 
+.env.example 
