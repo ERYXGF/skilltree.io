@@ -1,0 +1,182 @@
+{
+  "scikit-learn": {
+    "skill": "ML modeling",
+    "job_family": "Data Scientist"
+  },
+  "react": {
+    "skill": "Frontend UI",
+    "job_family": "Frontend Engineer"
+  },
+  "pandas": {
+    "skill": "Data manipulation",
+    "job_family": "Data Scientist"
+  },
+  "fastapi": {
+    "skill": "API development",
+    "job_family": "Backend Engineer"
+  },
+  "sqlalchemy": {
+    "skill": "Database ORM",
+    "job_family": "Backend Engineer"
+  },
+  "express": {
+    "skill": "API development",
+    "job_family": "Backend Engineer"
+  },
+  "tailwind": {
+    "skill": "CSS styling",
+    "job_family": "Frontend Engineer"
+  },
+  "torch": {
+    "skill": "Deep learning",
+    "job_family": "ML Engineer"
+  },
+  "pytest": {
+    "skill": "Testing",
+    "job_family": "Backend Engineer"
+  },
+  "celery": {
+    "skill": "Task queuing",
+    "job_family": "Backend Engineer"
+  },
+  "numpy": {
+    "skill": "Numerical computing",
+    "job_family": "Data Scientist"
+  },
+  "tensorflow": {
+    "skill": "Deep learning",
+    "job_family": "ML Engineer"
+  },
+  "django": {
+    "skill": "Web framework",
+    "job_family": "Backend Engineer"
+  },
+  "flask": {
+    "skill": "Web framework",
+    "job_family": "Backend Engineer"
+  },
+  "vue": {
+    "skill": "Frontend UI",
+    "job_family": "Frontend Engineer"
+  },
+  "angular": {
+    "skill": "Frontend UI",
+    "job_family": "Frontend Engineer"
+  },
+  "next.js": {
+    "skill": "Full-stack framework",
+    "job_family": "Full Stack Engineer"
+  },
+  "node.js": {
+    "skill": "Backend runtime",
+    "job_family": "Backend Engineer"
+  },
+  "typescript": {
+    "skill": "Type-safe programming",
+    "job_family": "Frontend Engineer"
+  },
+  "postgresql": {
+    "skill": "Database management",
+    "job_family": "Backend Engineer"
+  },
+  "mongodb": {
+    "skill": "NoSQL database",
+    "job_family": "Backend Engineer"
+  },
+  "redis": {
+    "skill": "Caching",
+    "job_family": "Backend Engineer"
+  },
+  "docker": {
+    "skill": "Containerization",
+    "job_family": "DevOps Engineer"
+  },
+  "kubernetes": {
+    "skill": "Container orchestration",
+    "job_family": "DevOps Engineer"
+  },
+  "terraform": {
+    "skill": "Infrastructure as code",
+    "job_family": "DevOps Engineer"
+  },
+  "aws": {
+    "skill": "Cloud infrastructure",
+    "job_family": "DevOps Engineer"
+  },
+  "jest": {
+    "skill": "Testing",
+    "job_family": "Frontend Engineer"
+  },
+  "webpack": {
+    "skill": "Build tooling",
+    "job_family": "Frontend Engineer"
+  },
+  "vite": {
+    "skill": "Build tooling",
+    "job_family": "Frontend Engineer"
+  },
+  "graphql": {
+    "skill": "API design",
+    "job_family": "Backend Engineer"
+  },
+  "redux": {
+    "skill": "State management",
+    "job_family": "Frontend Engineer"
+  },
+  "matplotlib": {
+    "skill": "Data visualization",
+    "job_family": "Data Scientist"
+  },
+  "seaborn": {
+    "skill": "Data visualization",
+    "job_family": "Data Scientist"
+  },
+  "jupyter": {
+    "skill": "Interactive computing",
+    "job_family": "Data Scientist"
+  },
+  "spark": {
+    "skill": "Big data processing",
+    "job_family": "Data Engineer"
+  },
+  "airflow": {
+    "skill": "Workflow orchestration",
+    "job_family": "Data Engineer"
+  },
+  "kafka": {
+    "skill": "Stream processing",
+    "job_family": "Data Engineer"
+  },
+  "elasticsearch": {
+    "skill": "Search engine",
+    "job_family": "Backend Engineer"
+  },
+  "nginx": {
+    "skill": "Web server",
+    "job_family": "DevOps Engineer"
+  },
+  "git": {
+    "skill": "Version control",
+    "job_family": "Backend Engineer"
+  },
+  "github-actions": {
+    "skill": "CI/CD",
+    "job_family": "DevOps Engineer"
+  },
+  "jenkins": {
+    "skill": "CI/CD",
+    "job_family": "DevOps Engineer"
+  },
+  "ansible": {
+    "skill": "Configuration management",
+    "job_family": "DevOps Engineer"
+  },
+  "prometheus": {
+    "skill": "Monitoring",
+    "job_family": "DevOps Engineer"
+  },
+  "grafana": {
+    "skill": "Observability",
+    "job_family": "DevOps Engineer"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "Data Scientist": [
+    "Built predictive models using scikit-learn and XGBoost, achieving 92% accuracy on customer churn prediction",
+    "Performed exploratory data analysis on 10M+ records using pandas and numpy to identify key business insights",
+    "Developed data visualization dashboards with matplotlib and seaborn to communicate findings to stakeholders",
+    "Implemented A/B testing frameworks to measure feature impact and drive data-driven product decisions",
+    "Created automated ETL pipelines for data preprocessing and feature engineering workflows",
+    "Collaborated with engineering teams to deploy ML models into production environments",
+    "Conducted statistical analysis and hypothesis testing to validate business assumptions",
+    "Optimized model performance through hyperparameter tuning and cross-validation techniques"
+  ],
+  "Frontend Engineer": [
+    "Developed responsive web applications using React, TypeScript, and modern CSS frameworks",
+    "Built reusable component libraries with React and Vue.js to accelerate development velocity",
+    "Implemented state management solutions using Redux and Context API for complex applications",
+    "Optimized application performance, reducing initial load time by 40% through code splitting and lazy loading",
+    "Created pixel-perfect UI implementations from Figma designs using Tailwind CSS and styled-components",
+    "Integrated RESTful and GraphQL APIs to deliver dynamic, data-driven user experiences",
+    "Wrote comprehensive unit and integration tests using Jest and React Testing Library",
+    "Collaborated with UX designers to implement accessible, WCAG-compliant interfaces",
+    "Configured build pipelines with Webpack and Vite for optimized production deployments"
+  ],
+  "Backend Engineer": [
+    "Designed and implemented RESTful APIs using FastAPI and Express.js serving 1M+ daily requests",
+    "Built scalable microservices architecture with Node.js and Python, improving system modularity",
+    "Implemented database schemas and optimized queries using PostgreSQL and SQLAlchemy ORM",
+    "Developed asynchronous task processing systems with Celery and Redis for background jobs",
+    "Created comprehensive API documentation using OpenAPI/Swagger specifications",
+    "Implemented authentication and authorization using JWT tokens and OAuth2 protocols",
+    "Optimized database performance through indexing strategies and query optimization",
+    "Built real-time features using WebSockets and server-sent events",
+    "Integrated third-party APIs and payment gateways (Stripe, PayPal) into production systems",
+    "Implemented caching strategies with Redis to reduce database load by 60%",
+    "Wrote unit and integration tests using pytest and Jest to ensure code reliability"
+  ],
+  "ML Engineer": [
+    "Deployed deep learning models using PyTorch and TensorFlow in production environments",
+    "Built end-to-end ML pipelines from data ingestion to model serving and monitoring",
+    "Optimized neural network architectures for inference speed and memory efficiency",
+    "Implemented MLOps practices including model versioning, A/B testing, and automated retraining",
+    "Developed computer vision solutions using CNNs for image classification and object detection",
+    "Created NLP models for text classification, sentiment analysis, and named entity recognition",
+    "Scaled model training using distributed computing frameworks and GPU acceleration",
+    "Monitored model performance in production and implemented drift detection mechanisms",
+    "Collaborated with data scientists to productionize research models and experiments"
+  ],
+  "Full Stack Engineer": [
+    "Built full-stack applications using Next.js, combining server-side rendering with React",
+    "Developed end-to-end features from database design to frontend implementation",
+    "Implemented real-time collaborative features using WebSockets and optimistic UI updates",
+    "Created serverless functions and API routes for backend logic in Next.js applications",
+    "Designed and implemented database schemas for both SQL and NoSQL databases",
+    "Built authentication flows and user management systems with session handling",
+    "Optimized application performance across the entire stack, from database queries to frontend rendering",
+    "Deployed applications to cloud platforms (Vercel, AWS, Heroku) with CI/CD pipelines"
+  ],
+  "DevOps Engineer": [
+    "Designed and maintained Kubernetes clusters for containerized application deployments",
+    "Implemented Infrastructure as Code using Terraform to manage cloud resources across AWS/GCP/Azure",
+    "Built CI/CD pipelines with GitHub Actions and Jenkins, reducing deployment time by 70%",
+    "Configured monitoring and alerting systems using Prometheus and Grafana for 99.9% uptime",
+    "Automated infrastructure provisioning and configuration management with Ansible",
+    "Implemented container orchestration strategies and service mesh architectures",
+    "Optimized cloud costs through resource right-sizing and auto-scaling policies",
+    "Managed nginx and load balancer configurations for high-availability systems",
+    "Implemented security best practices including secrets management and network policies",
+    "Created disaster recovery procedures and automated backup strategies"
+  ],
+  "Data Engineer": [
+    "Built scalable data pipelines using Apache Spark to process terabytes of data daily",
+    "Designed and implemented data warehouse solutions using Snowflake and BigQuery",
+    "Developed workflow orchestration systems with Apache Airflow for complex ETL processes",
+    "Implemented real-time data streaming pipelines using Apache Kafka and Flink",
+    "Optimized data storage and retrieval patterns for analytical workloads",
+    "Created data quality frameworks to ensure accuracy and consistency across datasets",
+    "Collaborated with data scientists to build feature stores for ML model training",
+    "Implemented data governance policies and metadata management systems",
+    "Migrated legacy data systems to modern cloud-based architectures"
+  ]
+}

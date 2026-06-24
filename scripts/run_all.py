@@ -1,5 +1,6 @@
 """Phase 10 — discover and run every scripts/test_*.py file.
 Phase 20 — includes Part B ingestion tests.
+Phase 35 — includes Part D scoring & resume assembly tests.
 """
 
 from __future__ import annotations
@@ -29,6 +30,13 @@ PART_B_TESTS = [
     "test_github_client.py",
     "test_repo_analyzer.py",
     "test_main_routes.py",  # Re-run with new ingestion tests
+]
+
+# Part D scoring & resume assembly tests (Phases 33–35)
+PART_D_TESTS = [
+    "test_proficiency_scorer.py",
+    "test_resume_builder.py",
+    "test_chart_data.py",
 ]
 
 
@@ -98,12 +106,33 @@ def main() -> int:
     print("-" * 60)
     print(f"Part B: {part_b_passed}/{len(part_b_unique)} passed\n")
 
+    # Run Part D tests
+    print("=" * 60)
+    print("PART D: Scoring & Resume Assembly (Phases 33–35)")
+    print("=" * 60)
+    print(f"{'TEST':<32} {'RESULT':<8}")
+    print("-" * 60)
+
+    for script in PART_D_TESTS:
+        name, passed, output = _run_test(script)
+        status = "PASS" if passed else "FAIL"
+        print(f"{name:<32} {status:<8}")
+        if not passed:
+            all_failures.append(f"Part D: {name}")
+            if output:
+                print(output)
+                print()
+
+    part_d_passed = len(PART_D_TESTS) - len([f for f in all_failures if f.startswith("Part D:")])
+    print("-" * 60)
+    print(f"Part D: {part_d_passed}/{len(PART_D_TESTS)} passed\n")
+
     # Summary
     print("=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    total_tests = len(FOUNDATION_TESTS) + len(part_b_unique)
-    total_passed = foundation_passed + part_b_passed
+    total_tests = len(FOUNDATION_TESTS) + len(part_b_unique) + len(PART_D_TESTS)
+    total_passed = foundation_passed + part_b_passed + part_d_passed
     print(f"Total: {total_passed}/{total_tests} tests passed")
 
     if all_failures:
