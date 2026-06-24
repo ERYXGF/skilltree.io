@@ -215,4 +215,42 @@ def language_breakdown(file_tree: list[str]) -> dict[str, float]:
     return _to_percentages(_language_counts(file_tree))
 
 
-# Phase 19: build_repo_summary
+def build_repo_summary(
+    meta: dict,
+    tree: list[str],
+    deps: dict,
+    langs: dict,
+) -> dict:
+    """Build a complete repository summary dictionary from analyzed components.
+
+    Args:
+        meta: Repository metadata containing repo_url, owner, repo, description, stars, primary_language
+        tree: List of file paths in the repository
+        deps: Dictionary mapping ecosystem names to dependency lists (e.g., {"python": [...], "javascript": [...]})
+        langs: Dictionary mapping language names to percentage shares
+
+    Returns:
+        Dictionary with keys: repo_url, owner, repo, description, stars, primary_language,
+        languages, dependencies, file_tree, file_count, top_level_dirs
+    """
+    # Extract top-level directories from file tree
+    top_level_dirs: set[str] = set()
+    for path in tree:
+        normalized = path.replace("\\", "/").strip("/")
+        if "/" in normalized:
+            top_dir = normalized.split("/", 1)[0]
+            top_level_dirs.add(top_dir)
+
+    return {
+        "repo_url": meta.get("repo_url", ""),
+        "owner": meta.get("owner", ""),
+        "repo": meta.get("repo", ""),
+        "description": meta.get("description", ""),
+        "stars": meta.get("stars", 0),
+        "primary_language": meta.get("primary_language", ""),
+        "languages": langs,
+        "dependencies": deps,
+        "file_tree": tree,
+        "file_count": len(tree),
+        "top_level_dirs": sorted(top_level_dirs),
+    }

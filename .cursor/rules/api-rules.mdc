@@ -1,0 +1,8 @@
+---
+description: "Rules for building Fast-API route handlers"
+alwaysApply: false
+globs: ["backend/routers/**/*.py", "backend/main.py"]
+---
+# API Endpoint Architecture
+- All response schemas must explicitly use models from `backend/models/schemas.py`.
+- Never write raw text error messages; always raise `HTTPException(status_code=..., detail=...)` using definitions in our exception handler.

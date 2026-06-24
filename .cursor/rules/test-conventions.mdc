@@ -1,0 +1,8 @@
+---
+description: "Standard conventions for writing backend unit tests"
+alwaysApply: false
+globs: ["scripts/test_*.py", "tests/**/*.py"]
+---
+# Testing Framework
+- We use `pytest`. All fixtures must reside in `conftest.py`.
+- Aim for 100% test coverage on critical route files.

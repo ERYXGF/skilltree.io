@@ -1,0 +1,20 @@
+---
+description: "Global tech stack context and architectural progress for the finance tracker app"
+alwaysApply: true
+globs: *
+---
+# Project Context & Contract
+
+## Tech Stack & Progress
+- *Phases 1-10:* Core Foundation Complete (FastAPI server, SQLite cache, schemas).
+- **Framework:** FastAPI (`backend/main.py`)
+- **Database:** SQLite (`backend/db/database.py`) using Pydantic schemas (`backend/models/schemas.py`)
+- **Middlewares:** CORS and a global exception handler are fully functional.
+- *Phases 11-18 (Wave 1 Complete):* Ingestion modules are frozen. 
+  - `backend/core/url_parser.py` -> `parse_github_url(url)`
+  - `backend/core/github_client.py` -> `GitHubClient` (methods: `get_repo_meta`, `get_file_tree`, `get_file`)
+  - `backend/core/repo_analyzer.py` -> Dependency and language breakdown helpers.
+
+## Core Directives for Agents
+1. Before writing new endpoints, cross-reference `backend/models/schemas.py` to ensure type consistency.
+2. Ensure any newly generated code integrates with the existing global exception logging structure.

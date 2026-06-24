@@ -1,7 +1,7 @@
 """Pydantic request/response models."""
 
 import re
-from typing import List
+from typing import Any, Dict, List
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -32,6 +32,21 @@ class SkillScore(BaseModel):
     skill: str = Field(..., min_length=1)
     score: int = Field(..., ge=0, le=100)
     rationale: str = Field(default="")
+
+
+class RepoSummary(BaseModel):
+    """Phase 19: Complete repository summary model."""
+    repo_url: str
+    owner: str
+    repo: str
+    description: str
+    stars: int = Field(ge=0)
+    primary_language: str
+    languages: Dict[str, float] = Field(default_factory=dict)
+    dependencies: Dict[str, List[str]] = Field(default_factory=dict)
+    file_tree: List[str] = Field(default_factory=list)
+    file_count: int = Field(ge=0)
+    top_level_dirs: List[str] = Field(default_factory=list)
 
 
 class AnalyzeResponse(BaseModel):

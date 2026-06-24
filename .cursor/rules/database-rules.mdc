@@ -1,0 +1,8 @@
+---
+description: "SQLite query optimization and schema constraints"
+alwaysApply: false
+globs: ["backend/db/**/*.py"]
+---
+# Database Patterns
+- Always open SQLite sessions using context managers (`with get_db() as db:`).
+- Enforce lowercase and snake_case for all custom column constraints.
