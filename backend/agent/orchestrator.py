@@ -9,9 +9,9 @@ Claude provides a final text answer.
 import json
 from typing import Any
 
-from backend.agent.client import call_claude
-from backend.agent.prompts import BULLET_INSTRUCTIONS, SYSTEM_PROMPT
-from backend.agent.tools import TOOL_SCHEMAS, dispatch
+from .client import call_claude
+from .prompts import BULLET_INSTRUCTIONS, SYSTEM_PROMPT
+from .tools import TOOL_SCHEMAS, dispatch
 
 
 def run_orchestrator(repo_summary: dict[str, Any]) -> str:

@@ -12,7 +12,7 @@ from pathlib import Path
 backend_path = Path(__file__).parent.parent / "backend"
 sys.path.insert(0, str(backend_path))
 
-from agent.prompts import SYSTEM_PROMPT, BULLET_INSTRUCTIONS
+from backend.agent.prompts import SYSTEM_PROMPT, BULLET_INSTRUCTIONS
 
 # Set UTF-8 encoding for Windows console
 if sys.platform == "win32":

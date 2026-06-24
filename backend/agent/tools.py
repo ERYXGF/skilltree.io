@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from backend.core.proficiency_scorer import score_multiple_skills
+from ..core.proficiency_scorer import score_multiple_skills
 
 
 def load_tech_taxonomy() -> dict[str, dict[str, str]]:

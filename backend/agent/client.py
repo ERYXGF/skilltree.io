@@ -6,7 +6,7 @@ from typing import Any, Optional
 import anthropic
 from anthropic.types import Message
 
-from backend.config import get_settings
+from ..config import get_settings
 
 
 def call_claude(

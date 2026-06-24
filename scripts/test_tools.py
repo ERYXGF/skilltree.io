@@ -9,11 +9,11 @@ summaries without hallucinating.
 import sys
 from pathlib import Path
 
-# Add backend to path BEFORE importing
-backend_path = Path(__file__).parent.parent / "backend"
-sys.path.insert(0, str(backend_path))
+# Add project root to path BEFORE importing
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
-from agent.tools import (
+from backend.agent.tools import (
     DETECT_STACK_TOOL,
     MAP_TO_JOBS_TOOL,
     SCORE_SKILLS_TOOL,
