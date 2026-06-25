@@ -1,6 +1,7 @@
 """Phase 10 — discover and run every scripts/test_*.py file.
 Phase 20 — includes Part B ingestion tests.
 Phase 35 — includes Part D scoring & resume assembly tests.
+Phase 52 — includes Part E frontend integration tests.
 """
 
 from __future__ import annotations
@@ -37,6 +38,12 @@ PART_D_TESTS = [
     "test_proficiency_scorer.py",
     "test_resume_builder.py",
     "test_chart_data.py",
+]
+
+# Part E frontend integration tests (Phases 36–52)
+PART_E_TESTS = [
+    "test_frontend_build.py",
+    "test_frontend_integration.py",
 ]
 
 
@@ -127,12 +134,33 @@ def main() -> int:
     print("-" * 60)
     print(f"Part D: {part_d_passed}/{len(PART_D_TESTS)} passed\n")
 
+    # Run Part E tests
+    print("=" * 60)
+    print("PART E: Frontend Integration (Phases 36–52)")
+    print("=" * 60)
+    print(f"{'TEST':<32} {'RESULT':<8}")
+    print("-" * 60)
+
+    for script in PART_E_TESTS:
+        name, passed, output = _run_test(script)
+        status = "PASS" if passed else "FAIL"
+        print(f"{name:<32} {status:<8}")
+        if not passed:
+            all_failures.append(f"Part E: {name}")
+            if output:
+                print(output)
+                print()
+
+    part_e_passed = len(PART_E_TESTS) - len([f for f in all_failures if f.startswith("Part E:")])
+    print("-" * 60)
+    print(f"Part E: {part_e_passed}/{len(PART_E_TESTS)} passed\n")
+
     # Summary
     print("=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    total_tests = len(FOUNDATION_TESTS) + len(part_b_unique) + len(PART_D_TESTS)
-    total_passed = foundation_passed + part_b_passed + part_d_passed
+    total_tests = len(FOUNDATION_TESTS) + len(part_b_unique) + len(PART_D_TESTS) + len(PART_E_TESTS)
+    total_passed = foundation_passed + part_b_passed + part_d_passed + part_e_passed
     print(f"Total: {total_passed}/{total_tests} tests passed")
 
     if all_failures:
