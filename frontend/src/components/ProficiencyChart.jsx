@@ -17,11 +17,11 @@ function ProficiencyChart({ data, isLoading = false }) {
     }
 
     // Sort skills by proficiency score (descending)
-    const sortedSkills = [...data.skills].sort((a, b) => b.proficiency - a.proficiency)
+    const sortedSkills = [...data.skills].sort((a, b) => b.score - a.score)
 
     // Extract data for plotting
-    const skillNames = sortedSkills.map(skill => skill.name)
-    const proficiencyScores = sortedSkills.map(skill => skill.proficiency)
+    const skillNames = sortedSkills.map(skill => skill.skill)
+    const proficiencyScores = sortedSkills.map(skill => skill.score)
     const categories = sortedSkills.map(skill => skill.category || 'Other')
 
     // Color mapping for different categories
@@ -211,13 +211,13 @@ function ProficiencyChart({ data, isLoading = false }) {
             </div>
             <div>
               <p className="text-2xl font-bold text-primary-600">
-                {Math.max(...data.skills.map(s => s.proficiency)).toFixed(0)}%
+                {Math.max(...data.skills.map(s => s.score)).toFixed(0)}%
               </p>
               <p className="text-xs text-gray-600">Top Score</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-primary-600">
-                {(data.skills.reduce((sum, s) => sum + s.proficiency, 0) / data.skills.length).toFixed(0)}%
+                {(data.skills.reduce((sum, s) => sum + s.score, 0) / data.skills.length).toFixed(0)}%
               </p>
               <p className="text-xs text-gray-600">Average</p>
             </div>

@@ -220,5 +220,8 @@ __marimo__/
 #Info
 info/
 
-#.env.example because of the leak of the API key: 
-.env.example 
+#.env.example because of the leak of the API key:
+.env.example
+
+#node_modules/
+node_modules/
