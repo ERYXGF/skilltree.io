@@ -1,0 +1,3 @@
+Never read the frontend/node_modules directory.
+Never read backend/venv or any python virtual environments.
+Keep file reads targeted to specific lines or small files. Do not read entire folders recursively.

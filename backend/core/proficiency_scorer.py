@@ -254,3 +254,65 @@ def score_multiple_skills(
     scored.sort(key=lambda x: x["score"], reverse=True)
 
     return scored
+
+
+def to_xp_level(score: int) -> dict[str, Any]:
+    """
+    Convert 0-100 proficiency score to RPG-style level and XP.
+
+    Phase 54: XP & levels per skill
+
+    Provides gamification by converting raw scores into:
+    - Level (1-10): Represents overall mastery tier
+    - XP: Total experience points (score * 10)
+    - XP to next level: Points needed for next level
+    - Progress percentage: Visual progress bar within current level
+
+    Formula:
+    - Level = floor(score / 10) + 1 (capped at 10)
+    - XP = score * 10
+    - XP to next = 100 (or 0 if max level)
+    - Progress % = (score % 10) * 10
+
+    Args:
+        score: Proficiency score from 0-100
+
+    Returns:
+        Dictionary with level, xp, xp_to_next, and progress_pct
+
+    Example:
+        >>> to_xp_level(0)
+        {'level': 1, 'xp': 0, 'xp_to_next': 100, 'progress_pct': 0}
+        >>> to_xp_level(55)
+        {'level': 5, 'xp': 550, 'xp_to_next': 100, 'progress_pct': 50}
+        >>> to_xp_level(100)
+        {'level': 10, 'xp': 1000, 'xp_to_next': 0, 'progress_pct': 100}
+    """
+    # Clamp score to valid range
+    score = max(0, min(100, score))
+
+    # Calculate level (1-10)
+    # Score 0-9 = Level 1, 10-19 = Level 2, ..., 90-100 = Level 10
+    level = min(10, (score // 10) + 1)
+
+    # Calculate total XP (score * 10 for scaling)
+    xp = score * 10
+
+    # Calculate XP needed for next level
+    if score >= 100:
+        xp_to_next = 0  # Max level reached
+    else:
+        xp_to_next = 100  # Each level requires 100 XP
+
+    # Calculate progress percentage within current level
+    if score >= 100:
+        progress_pct = 100  # Max level
+    else:
+        progress_pct = (score % 10) * 10
+
+    return {
+        "level": level,
+        "xp": xp,
+        "xp_to_next": xp_to_next,
+        "progress_pct": progress_pct
+    }

@@ -366,8 +366,19 @@ def test_analyze_endpoint_cache_miss_then_hit(monkeypatch, tmp_path):
         assert response2.status_code == 200
         data2 = response2.json()
 
-        # Data should be identical
-        assert data2 == data1
+        # Data should be identical except for share_id (Phase 60: each has unique share_id)
+        assert data2["repo_url"] == data1["repo_url"]
+        assert data2["resume_markdown"] == data1["resume_markdown"]
+        assert data2["bullets"] == data1["bullets"]
+        assert data2["skills"] == data1["skills"]
+        assert data2["chart_data"] == data1["chart_data"]
+        assert data2["skill_tree"] == data1["skill_tree"]
+
+        # Both should have share_ids (may be different)
+        assert "share_id" in data1
+        assert "share_id" in data2
+        assert isinstance(data1["share_id"], str)
+        assert isinstance(data2["share_id"], str)
 
         # Verify external services were NOT called again
         assert mock_client.get_repo_meta.call_count == 1  # Still 1, not 2

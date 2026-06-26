@@ -6,14 +6,21 @@
 /**
  * Analyze a GitHub repository
  * @param {string} url - The GitHub repository URL
+ * @param {string|null} targetRole - Optional target role for personalized recommendations
  * @returns {Promise<Object>} - The analysis response matching AnalyzeResponse schema
  * @throws {Error} - Network or API errors
  */
-export async function analyzeRepo(url) {
+export async function analyzeRepo(url, targetRole = null) {
   try {
     // Validate input
     if (!url || typeof url !== 'string') {
       throw new Error('Invalid repository URL provided');
+    }
+
+    // Build request body
+    const requestBody = { repo_url: url };
+    if (targetRole) {
+      requestBody.target_role = targetRole;
     }
 
     // Make POST request to backend
@@ -22,7 +29,7 @@ export async function analyzeRepo(url) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ repo_url: url }),
+      body: JSON.stringify(requestBody),
     });
 
     // Handle HTTP errors

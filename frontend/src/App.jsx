@@ -1,28 +1,73 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import confetti from 'canvas-confetti'
 import { analyzeRepo } from './api'
 import RepoInput from './components/RepoInput'
 import LoadingState from './components/LoadingState'
 import ResumePanel from './components/ResumePanel'
 import ProficiencyChart from './components/ProficiencyChart'
+import SkillTreeView from './components/SkillTreeView'
 
 function App() {
   // Global state management
   const [repoData, setRepoData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [viewMode, setViewMode] = useState('chart') // 'chart' or 'tree'
+  const hasShownConfetti = useRef(false) // Track if confetti has been shown
+
+  /**
+   * Trigger confetti celebration
+   * Phase 59: Confetti on first analysis
+   */
+  const triggerConfetti = () => {
+    const duration = 2000 // 2 seconds
+    const end = Date.now() + duration
+
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+
+    const frame = () => {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors
+      })
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors
+      })
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame)
+      }
+    }
+
+    frame()
+  }
 
   /**
    * Handle repository analysis
+   * Phase 56: Now accepts optional target_role parameter
    */
-  const handleAnalyze = async (url) => {
+  const handleAnalyze = async (url, targetRole = null) => {
     // Reset state
     setErrorMessage('')
     setRepoData(null)
     setIsLoading(true)
 
     try {
-      const data = await analyzeRepo(url)
+      const data = await analyzeRepo(url, targetRole)
       setRepoData(data)
+
+      // Trigger confetti on first successful analysis
+      if (!hasShownConfetti.current) {
+        triggerConfetti()
+        hasShownConfetti.current = true
+      }
     } catch (error) {
       setErrorMessage(error.message || 'Failed to analyze repository')
       console.error('Analysis error:', error)
@@ -77,7 +122,7 @@ function App() {
           </div>
         </div>
 
-        {/* Split-Screen Layout: Resume Panel (Left) + Chart Panel (Right) */}
+        {/* Split-Screen Layout: Resume Panel (Left) + Chart/Tree Panel (Right) */}
         {(isLoading || repoData) && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-24rem)]">
             {/* Left Panel: Resume */}
@@ -85,9 +130,40 @@ function App() {
               <ResumePanel data={repoData} isLoading={isLoading} />
             </div>
 
-            {/* Right Panel: Proficiency Chart */}
+            {/* Right Panel: Proficiency Chart or Skill Tree */}
             <div className="panel-container">
-              <ProficiencyChart data={repoData} isLoading={isLoading} />
+              {/* View Mode Toggle */}
+              <div className="bg-white border-b border-gray-200 px-4 py-2 flex gap-2">
+                <button
+                  onClick={() => setViewMode('chart')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    viewMode === 'chart'
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  📊 Chart View
+                </button>
+                <button
+                  onClick={() => setViewMode('tree')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    viewMode === 'tree'
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🌳 Skill Tree
+                </button>
+              </div>
+
+              {/* Conditional View Rendering */}
+              <div className="h-[calc(100%-3.5rem)]">
+                {viewMode === 'chart' ? (
+                  <ProficiencyChart data={repoData} isLoading={isLoading} />
+                ) : (
+                  <SkillTreeView data={repoData} isLoading={isLoading} />
+                )}
+              </div>
             </div>
           </div>
         )}

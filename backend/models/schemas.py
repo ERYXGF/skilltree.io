@@ -13,6 +13,10 @@ _GITHUB_REPO_PATTERN = re.compile(
 
 class AnalyzeRequest(BaseModel):
     repo_url: str = Field(..., description="Public GitHub repository URL")
+    target_role: str | None = Field(
+        None,
+        description="Optional target role for personalized recommendations (e.g., 'Backend Engineer', 'Data Scientist')"
+    )
 
     @field_validator("repo_url")
     @classmethod
@@ -55,3 +59,5 @@ class AnalyzeResponse(BaseModel):
     bullets: List[ResumeBullet]
     skills: List[SkillScore]
     chart_data: Dict[str, Any] = Field(default_factory=dict, description="Plotly chart configuration")
+    skill_tree: Dict[str, Any] = Field(default_factory=dict, description="Skill tree graph data (Phase 53)")
+    share_id: str | None = Field(None, description="Shareable link ID (Phase 60)")

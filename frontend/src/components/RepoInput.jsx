@@ -1,11 +1,25 @@
 import React, { useState } from 'react'
-import { Github, Search, AlertCircle, CheckCircle } from 'lucide-react'
+import { Github, Search, AlertCircle, CheckCircle, Briefcase } from 'lucide-react'
 
 /**
  * GitHub URL validation regex
  * Matches: https://github.com/user/repo or github.com/user/repo
  */
 const GITHUB_URL_REGEX = /^(https?:\/\/)?(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/i
+
+/**
+ * Available target roles for personalized recommendations
+ */
+const TARGET_ROLES = [
+  { value: '', label: 'No specific role (general analysis)' },
+  { value: 'Backend Engineer', label: 'Backend Engineer' },
+  { value: 'Frontend Engineer', label: 'Frontend Engineer' },
+  { value: 'Full Stack Engineer', label: 'Full Stack Engineer' },
+  { value: 'Data Scientist', label: 'Data Scientist' },
+  { value: 'ML Engineer', label: 'ML Engineer' },
+  { value: 'DevOps Engineer', label: 'DevOps Engineer' },
+  { value: 'Data Engineer', label: 'Data Engineer' },
+]
 
 /**
  * Preset demo repositories for quick testing
@@ -34,6 +48,7 @@ const PRESET_REPOS = [
  */
 function RepoInput({ onAnalyze, isLoading = false }) {
   const [url, setUrl] = useState('')
+  const [targetRole, setTargetRole] = useState('')
   const [validationState, setValidationState] = useState(null) // null, 'valid', 'invalid'
   const [touched, setTouched] = useState(false)
 
@@ -80,7 +95,8 @@ function RepoInput({ onAnalyze, isLoading = false }) {
     setValidationState(state)
 
     if (state === 'valid' && onAnalyze) {
-      onAnalyze(trimmedUrl)
+      // Pass both URL and target role to parent
+      onAnalyze(trimmedUrl, targetRole || null)
     }
   }
 
@@ -93,7 +109,8 @@ function RepoInput({ onAnalyze, isLoading = false }) {
     setTouched(true)
 
     if (onAnalyze) {
-      onAnalyze(presetUrl)
+      // Pass both URL and target role to parent
+      onAnalyze(presetUrl, targetRole || null)
     }
   }
 
@@ -177,6 +194,33 @@ function RepoInput({ onAnalyze, isLoading = false }) {
             </p>
           </div>
         )}
+
+        {/* Target Role Selector */}
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Briefcase className="h-5 w-5 text-gray-400" />
+          </div>
+          <select
+            value={targetRole}
+            onChange={(e) => setTargetRole(e.target.value)}
+            disabled={isLoading}
+            className="
+              w-full pl-10 pr-4 py-3
+              border border-gray-300 rounded-lg
+              outline-none transition-all duration-200
+              focus:ring-primary-500 focus:border-primary-500
+              disabled:opacity-50 disabled:cursor-not-allowed
+              bg-white
+            "
+            aria-label="Target role for personalized recommendations"
+          >
+            {TARGET_ROLES.map((role) => (
+              <option key={role.value} value={role.value}>
+                {role.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Submit Button */}
         <button

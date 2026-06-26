@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from backend.agent.orchestrator import run_orchestrator
 from backend.agent.tools import detect_stack_handler, score_skills_handler
 from backend.config import get_settings
-from backend.core.chart_data import to_plotly_payload
+from backend.core.chart_data import to_plotly_payload, to_skill_tree_data
 from backend.core.github_client import GitHubClient
 from backend.core.logging_config import get_logger
 from backend.core.repo_analyzer import (
@@ -18,7 +18,7 @@ from backend.core.repo_analyzer import (
 )
 from backend.core.resume_builder import clean_bullets, verify_grounded, to_markdown
 from backend.core.url_parser import parse_github_url
-from backend.models.database import cache_get, cache_set
+from backend.models.database import cache_get, cache_set, save_shared_result, get_shared_result
 from backend.models.schemas import (
     AnalyzeRequest,
     AnalyzeResponse,
@@ -131,6 +131,12 @@ def create_app() -> FastAPI:
             cached = cache_get(settings.db_path, repo_url)
             if cached is not None:
                 logger.info("Cache hit for %s (full analysis)", repo_url)
+                # Phase 60: Ensure cached results have share_id
+                if "share_id" not in cached or cached["share_id"] is None:
+                    share_id = save_shared_result(cached, settings.db_path)
+                    cached["share_id"] = share_id
+                    # Update cache with share_id
+                    cache_set(settings.db_path, repo_url, cached)
                 return AnalyzeResponse(**cached)
 
             logger.info("Cache miss for %s, running full analysis pipeline", repo_url)
@@ -230,6 +236,9 @@ def create_app() -> FastAPI:
             # Step 14: Generate chart data payload for frontend
             chart_data = to_plotly_payload(scored_skills, max_skills=10)
 
+            # Step 14b: Generate skill tree data for Phase 53
+            skill_tree_data = to_skill_tree_data(scored_skills)
+
             # Step 15: Build response payload
             response_data = {
                 "repo_url": repo_url,
@@ -237,12 +246,17 @@ def create_app() -> FastAPI:
                 "bullets": [bullet.model_dump() for bullet in bullets],
                 "skills": [skill.model_dump() for skill in skills],
                 "chart_data": chart_data,
+                "skill_tree": skill_tree_data,
             }
 
             # Step 16: Cache the result
             cache_set(settings.db_path, repo_url, response_data)
 
-            logger.info("Successfully completed full analysis for %s", repo_url)
+            # Step 17: Generate shareable link (Phase 60)
+            share_id = save_shared_result(response_data, settings.db_path)
+            response_data["share_id"] = share_id
+
+            logger.info("Successfully completed full analysis for %s (share: %s)", repo_url, share_id)
             return AnalyzeResponse(**response_data)
 
         except HTTPException:
@@ -255,6 +269,28 @@ def create_app() -> FastAPI:
                 status_code=500,
                 detail=f"Internal server error: {str(e)}"
             )
+
+    @app.get("/r/{share_id}", response_model=AnalyzeResponse)
+    async def get_shared_analysis(share_id: str) -> AnalyzeResponse:
+        """
+        Retrieve a shared analysis result by its share ID.
+
+        Phase 60: Shareable result link endpoint.
+        Returns the full analysis that was previously saved.
+        """
+        logger.info("Retrieving shared result: %s", share_id)
+
+        result = get_shared_result(share_id, settings.db_path)
+
+        if result is None:
+            logger.warning("Share ID not found: %s", share_id)
+            raise HTTPException(
+                status_code=404,
+                detail=f"Shared result not found: {share_id}"
+            )
+
+        logger.info("Successfully retrieved shared result: %s", share_id)
+        return AnalyzeResponse(**result)
 
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:

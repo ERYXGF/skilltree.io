@@ -343,3 +343,136 @@ def to_markdown(bullets: list[str], skills: list[dict], meta: dict) -> str:
 
     # Join all lines with newlines
     return "\n".join(lines)
+
+
+def resume_strength(bullets: list[str], skills: list[dict]) -> dict[str, Any]:
+    """
+    Calculate resume strength score based on multiple quality factors.
+
+    Phase 57: Resume strength scoring system that evaluates:
+    - Quantified bullets (with numbers) = +10 each
+    - Action verb starts = +5 each
+    - Skill diversity = +20
+    - Bullet length (optimal 60-120 chars) = +5 each
+    - Technical depth (advanced skills) = +15
+
+    Args:
+        bullets: List of resume bullet point strings
+        skills: List of skill dictionaries with 'technology' and 'score' keys
+
+    Returns:
+        Dictionary with:
+        - score: int (0-100) overall resume strength
+        - tips: list[str] actionable improvement suggestions
+
+    Example:
+        >>> bullets = [
+        ...     "Built REST API serving 1M+ requests daily",
+        ...     "Optimized queries reducing latency by 60%"
+        ... ]
+        >>> skills = [
+        ...     {"technology": "fastapi", "score": 85},
+        ...     {"technology": "postgresql", "score": 80}
+        ... ]
+        >>> result = resume_strength(bullets, skills)
+        >>> result["score"]
+        75
+        >>> "quantif" in result["tips"][0].lower()
+        False
+    """
+    score = 0
+    tips = []
+
+    # Common action verbs for resume bullets
+    ACTION_VERBS = {
+        "architected", "built", "created", "designed", "developed", "engineered",
+        "implemented", "launched", "led", "optimized", "reduced", "improved",
+        "increased", "delivered", "deployed", "migrated", "refactored", "scaled",
+        "automated", "integrated", "established", "spearheaded", "collaborated",
+        "managed", "coordinated", "analyzed", "researched", "investigated"
+    }
+
+    # Factor 1: Quantified bullets (with numbers)
+    quantified_count = 0
+    for bullet in bullets:
+        # Check if bullet contains numbers (digits, percentages, etc.)
+        if re.search(r'\d+', bullet):
+            quantified_count += 1
+            score += 10
+
+    if quantified_count < len(bullets) * 0.5:
+        tips.append("Add more quantified results (e.g., '50% faster', '1M users', '$100K saved')")
+
+    # Factor 2: Action verb starts
+    action_verb_count = 0
+    for bullet in bullets:
+        first_word = bullet.split()[0].lower() if bullet.split() else ""
+        if first_word in ACTION_VERBS:
+            action_verb_count += 1
+            score += 5
+
+    if action_verb_count < len(bullets) * 0.7:
+        tips.append("Start more bullets with strong action verbs (e.g., 'Built', 'Optimized', 'Implemented')")
+
+    # Factor 3: Skill diversity
+    skill_count = len(skills)
+    if skill_count >= 5:
+        score += 20
+    elif skill_count >= 3:
+        score += 15
+    elif skill_count >= 1:
+        score += 10
+    else:
+        tips.append("Demonstrate proficiency in more technologies")
+
+    if skill_count < 5:
+        tips.append(f"Include {5 - skill_count} more skills to show technical breadth")
+
+    # Factor 4: Bullet length optimization (60-120 chars is ideal)
+    optimal_length_count = 0
+    for bullet in bullets:
+        length = len(bullet)
+        if 60 <= length <= 120:
+            optimal_length_count += 1
+            score += 5
+        elif length < 40:
+            tips.append(f"Expand short bullets with more context and impact")
+        elif length > 150:
+            tips.append(f"Shorten overly long bullets for better readability")
+
+    # Factor 5: Technical depth (high-scoring skills indicate advanced expertise)
+    if skills:
+        avg_skill_score = sum(s.get("score", 0) for s in skills) / len(skills)
+        if avg_skill_score >= 80:
+            score += 15
+        elif avg_skill_score >= 60:
+            score += 10
+        elif avg_skill_score >= 40:
+            score += 5
+
+        if avg_skill_score < 70:
+            tips.append("Deepen expertise in core technologies to demonstrate mastery")
+
+    # Cap score at 100
+    score = min(score, 100)
+
+    # Add general tips if score is low
+    if score < 50:
+        tips.insert(0, "Focus on quantifying achievements and using strong action verbs")
+    elif score < 70:
+        tips.insert(0, "Good foundation - add more specific metrics and technical details")
+    elif score >= 85:
+        tips = ["Excellent resume! Minor refinements could push it to perfection"] + tips
+
+    # Deduplicate tips while preserving order
+    seen = set()
+    unique_tips = []
+    for tip in tips:
+        if tip not in seen:
+            seen.add(tip)
+            unique_tips.append(tip)
+
+    return {
+        "score": score,
+        "tips": unique_tips[:5]  # Limit to top 5 tips
+    }

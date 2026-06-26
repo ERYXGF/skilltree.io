@@ -1,14 +1,16 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { FileText, Download, Copy, CheckCircle } from 'lucide-react'
+import { FileText, Download, Copy, CheckCircle, Share2 } from 'lucide-react'
 import LoadingState from './LoadingState'
 
 /**
  * ResumePanel Component
  * Displays the generated resume in markdown format with export options
+ * Phase 60: Added share link functionality
  */
 function ResumePanel({ data, isLoading = false }) {
   const [copySuccess, setCopySuccess] = React.useState(false)
+  const [shareCopySuccess, setShareCopySuccess] = React.useState(false)
 
   /**
    * Handle copy to clipboard
@@ -40,6 +42,24 @@ function ResumePanel({ data, isLoading = false }) {
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
+  }
+
+  /**
+   * Handle share link copy
+   * Phase 60: Copy shareable link to clipboard
+   */
+  const handleShareCopy = async () => {
+    if (!data?.share_id) return
+
+    try {
+      const shareUrl = `${window.location.origin}/r/${data.share_id}`
+      await navigator.clipboard.writeText(shareUrl)
+      setShareCopySuccess(true)
+      setTimeout(() => setShareCopySuccess(false), 2000)
+    } catch (error) {
+      console.error('Failed to copy share link:', error)
+      alert('Failed to copy share link')
+    }
   }
 
   /**
@@ -84,6 +104,27 @@ function ResumePanel({ data, isLoading = false }) {
         </div>
 
         <div className="flex items-center space-x-2">
+          {/* Share Link Button (Phase 60) */}
+          {data?.share_id && (
+            <button
+              onClick={handleShareCopy}
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors duration-200"
+              title="Copy shareable link"
+            >
+              {shareCopySuccess ? (
+                <>
+                  <CheckCircle className="w-4 h-4 mr-1.5" />
+                  <span>Link Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-4 h-4 mr-1.5" />
+                  <span>Share</span>
+                </>
+              )}
+            </button>
+          )}
+
           {/* Copy Button */}
           <button
             onClick={handleCopy}

@@ -2,6 +2,7 @@
 Phase 20 — includes Part B ingestion tests.
 Phase 35 — includes Part D scoring & resume assembly tests.
 Phase 52 — includes Part E frontend integration tests.
+Phase 55 — includes Part F stretch features tests.
 """
 
 from __future__ import annotations
@@ -46,6 +47,16 @@ PART_E_TESTS = [
     "test_frontend_integration.py",
 ]
 
+# Part F stretch features tests (Phases 53–80)
+PART_F_TESTS = [
+    "test_skilltree_data.py",
+    "test_xp_levels.py",
+    "test_recommender.py",
+    "test_api_contract.py",
+    "test_resume_strength.py",
+    "test_share.py",
+]
+
 
 def _run_test(script_name: str) -> tuple[str, bool, str]:
     path = SCRIPTS_DIR / script_name
@@ -54,8 +65,12 @@ def _run_test(script_name: str) -> tuple[str, bool, str]:
         cwd=ROOT,
         capture_output=True,
         text=True,
+        encoding='utf-8',
+        errors='replace',
     )
-    output = (result.stdout + result.stderr).strip()
+    stdout = result.stdout or ""
+    stderr = result.stderr or ""
+    output = (stdout + stderr).strip()
     return script_name, result.returncode == 0, output
 
 
@@ -77,7 +92,10 @@ def main() -> int:
         if not passed:
             all_failures.append(f"Foundation: {name}")
             if output:
-                print(output)
+                try:
+                    print(output)
+                except UnicodeEncodeError:
+                    print(output.encode('ascii', 'replace').decode('ascii'))
                 print()
 
     foundation_passed = len(FOUNDATION_TESTS) - len([f for f in all_failures if f.startswith("Foundation:")])
@@ -106,7 +124,10 @@ def main() -> int:
         if not passed:
             all_failures.append(f"Part B: {name}")
             if output:
-                print(output)
+                try:
+                    print(output)
+                except UnicodeEncodeError:
+                    print(output.encode('ascii', 'replace').decode('ascii'))
                 print()
 
     part_b_passed = len(part_b_unique) - len([f for f in all_failures if f.startswith("Part B:")])
@@ -127,7 +148,10 @@ def main() -> int:
         if not passed:
             all_failures.append(f"Part D: {name}")
             if output:
-                print(output)
+                try:
+                    print(output)
+                except UnicodeEncodeError:
+                    print(output.encode('ascii', 'replace').decode('ascii'))
                 print()
 
     part_d_passed = len(PART_D_TESTS) - len([f for f in all_failures if f.startswith("Part D:")])
@@ -148,19 +172,46 @@ def main() -> int:
         if not passed:
             all_failures.append(f"Part E: {name}")
             if output:
-                print(output)
+                try:
+                    print(output)
+                except UnicodeEncodeError:
+                    print(output.encode('ascii', 'replace').decode('ascii'))
                 print()
 
     part_e_passed = len(PART_E_TESTS) - len([f for f in all_failures if f.startswith("Part E:")])
     print("-" * 60)
     print(f"Part E: {part_e_passed}/{len(PART_E_TESTS)} passed\n")
 
+    # Run Part F tests
+    print("=" * 60)
+    print("PART F: Stretch Features (Phases 53–80)")
+    print("=" * 60)
+    print(f"{'TEST':<32} {'RESULT':<8}")
+    print("-" * 60)
+
+    for script in PART_F_TESTS:
+        name, passed, output = _run_test(script)
+        status = "PASS" if passed else "FAIL"
+        print(f"{name:<32} {status:<8}")
+        if not passed:
+            all_failures.append(f"Part F: {name}")
+            if output:
+                try:
+                    print(output)
+                except UnicodeEncodeError:
+                    print(output.encode('ascii', 'replace').decode('ascii'))
+                print()
+
+    part_f_passed = len(PART_F_TESTS) - len([f for f in all_failures if f.startswith("Part F:")])
+    print("-" * 60)
+    print(f"Part F: {part_f_passed}/{len(PART_F_TESTS)} passed\n")
+
     # Summary
     print("=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    total_tests = len(FOUNDATION_TESTS) + len(part_b_unique) + len(PART_D_TESTS) + len(PART_E_TESTS)
-    total_passed = foundation_passed + part_b_passed + part_d_passed + part_e_passed
+    total_tests = len(FOUNDATION_TESTS) + len(part_b_unique) + len(PART_D_TESTS) + len(PART_E_TESTS) + len(PART_F_TESTS)
+    total_passed = foundation_passed + part_b_passed + part_d_passed + part_e_passed + part_f_passed
     print(f"Total: {total_passed}/{total_tests} tests passed")
 
     if all_failures:
